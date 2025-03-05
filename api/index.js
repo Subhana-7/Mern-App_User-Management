@@ -18,7 +18,7 @@ mongoose
     console.log("Connected to MongoDB");
   })
   .catch((err) => {
-    console.log(err);
+    console.log("error connceting to database",err);
   });
 
 app.use("/api/user", userRoutes);
@@ -29,8 +29,8 @@ app.use((err, req, res, next) => {
   const message = err.message || "Internal Server Error";
   return res.status(statusCode).json({
     success: false,
-    message,
     statusCode,
+    message,
   });
 });
 

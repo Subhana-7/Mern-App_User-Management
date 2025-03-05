@@ -30,6 +30,7 @@ export const updateUser = async(req,res,next) => {
       {new:true}
     );
     const {password,...rest} = updatedUser._doc;
+    console.log("Updated user response:", rest);
     res.status(200).json(rest);
   }catch(error){
     next(error);
