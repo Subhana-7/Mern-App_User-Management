@@ -106,12 +106,12 @@ const Profile = () => {
   
 
   return (
-    <div className='p-3 max-w-lg mx-auto' >
+    <div className='p-3 max-w-lg mx-auto ' >
 
       <ToastContainer
         position='top-right' autoClose={3000} theme='colored' hideProgressBar={false} newestOnTop={true} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover/>
 
-      <h1 className='text-3xl font-bold text-center my-7' >Profile</h1>
+      <h1 className='text-3xl font-bold text-center my-7 text-white' >Profile</h1>
 
       <form onSubmit={handleSubmit} className='flex flex-col gap-6' >
 
