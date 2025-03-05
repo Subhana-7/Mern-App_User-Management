@@ -2,7 +2,7 @@ import React,{useEffect, useRef, useState} from 'react'
 import { useSelector } from 'react-redux'
 import {ToastContainer,toast} from 'react-toastify'
 import { useDispatch } from 'react-redux'
-import {updateUserStart,updateUserSuccess,updateUserFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure} from '../redux/user/userSlice'
+import {updateUserStart,updateUserSuccess,updateUserFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure,signOut} from '../redux/user/userSlice'
 
 const Profile = () => {
 
@@ -94,6 +94,15 @@ const Profile = () => {
     }
   }
 
+  const handleSignOut = async() => {
+    try{
+      await fetch('api/auth/signout');
+      dispatch(signOut());
+    }catch(error){
+      console.log(error);
+    }
+  }
+
   
 
   return (
@@ -122,7 +131,7 @@ const Profile = () => {
       </form>
         <div className='flex justify-between mt-5' >
           <span className='text-red-700 cursor-pointer' onClick={handleDeleteAccount} >Delete Account</span>
-          <span className='text-red-700 cursor-pointer' >Sign out</span>
+          <span className='text-red-700 cursor-pointer' onClick={handleSignOut} >Sign out</span>
         </div>
 
       <p className='text-red-700 mt-5' >{error && 'Something went wrong!'}</p>
