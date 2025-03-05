@@ -2,7 +2,7 @@ import React,{useEffect, useRef, useState} from 'react'
 import { useSelector } from 'react-redux'
 import {ToastContainer,toast} from 'react-toastify'
 import { useDispatch } from 'react-redux'
-import {updateUserStart,updateUserSuccess,updateUserFailure} from '../redux/user/userSlice'
+import {updateUserStart,updateUserSuccess,updateUserFailure,deleteUserStart,deleteUserSuccess,deleteUserFailure} from '../redux/user/userSlice'
 
 const Profile = () => {
 
@@ -76,6 +76,24 @@ const Profile = () => {
     }
   }
 
+
+  const handleDeleteAccount = async() => {
+    try{
+      dispatch(deleteUserStart())
+      const res = await fetch(`api/user/delete/${currentUser._id}`,{
+        method:'DELETE',
+      });
+      const data = await res.json();
+      if(data.success === false){
+        dispatch(deleteUserFailure(data))
+        return;
+      }
+      dispatch(deleteUserSuccess(data));
+    }catch(error){
+      dispatch(deleteUserFailure(error));
+    }
+  }
+
   
 
   return (
@@ -103,7 +121,7 @@ const Profile = () => {
         </button>
       </form>
         <div className='flex justify-between mt-5' >
-          <span className='text-red-700 cursor-pointer' >Delete Account</span>
+          <span className='text-red-700 cursor-pointer' onClick={handleDeleteAccount} >Delete Account</span>
           <span className='text-red-700 cursor-pointer' >Sign out</span>
         </div>
 
