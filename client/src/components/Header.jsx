@@ -14,20 +14,30 @@ const Header = () => {
           <Link to="/">
             <li>Home</li>
           </Link>
-          <Link to="/about">
-            <li>About</li>
-          </Link>
-          {currentUser ? (
-            <Link to='/profile' >
-            <img src={currentUser.profilePicture} alt="profile"  className="h-7 w-7 rounded-full object-cover ring-2 ring-blue-500 ring-offset-2 transition-all duration-200 hover:ring-purple-500" />
+          {currentUser?.isAdmin ? (
+            <Link to="/admin-dashboard">
+              <li>Admin Dashboard</li>
             </Link>
-          )
-          :(
-            <Link to="/sign-in">
-            <li>Sign in</li>
-          </Link>
+          ) : (
+            <Link to="/about">
+              <li>About</li>
+            </Link>
           )}
-          
+          {currentUser ? (
+            currentUser.isAdmin ? null : (
+              <Link to="/profile">
+                <img
+                  src={currentUser.profilePicture}
+                  alt="profile"
+                  className="h-7 w-7 rounded-full object-cover ring-2 ring-blue-500 ring-offset-2 transition-all duration-200 hover:ring-purple-500"
+                />
+              </Link>
+            )
+          ) : (
+            <Link to="/sign-in">
+              <li>Sign in</li>
+            </Link>
+          )}  
         </ul>
       </div>
     </div>

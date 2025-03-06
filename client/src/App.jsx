@@ -6,6 +6,10 @@ import Profile from "./pages/Profile";
 import About from "./pages/About";
 import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
+import AdminSignIn from "./pages/AdminSignIn";
+import AdminDashboard from "./pages/AdminDashboard";
+import PrivateAdminRoute from "./components/privateAdminRoute";
+
 
 const App = () => {
   return (
@@ -19,6 +23,15 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
         </Route>
         <Route path="/about" element={<About />} />
+        <Route path="/admin/sign-in" element={<AdminSignIn />} />
+        <Route
+          path="/admin"
+          element={
+            <PrivateAdminRoute>
+              <AdminDashboard />
+            </PrivateAdminRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
