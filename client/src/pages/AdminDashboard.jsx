@@ -203,7 +203,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className=" admin-dashboard p-4 max-w-4xl mx-auto">
+    <div className="admin-dashboard p-4 max-w-7xl mx-auto" style={{ backgroundColor: "rgb(17, 24, 39)" }}>
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -216,138 +216,146 @@ const AdminDashboard = () => {
         draggable
         pauseOnHover
       />
-      <h1 className="text-3xl font-semibold mb-4">Admin Dashboard</h1>
+      <h1 className="text-3xl font-semibold mb-4 text-white">Admin Dashboard</h1>
 
-      <div className="mb-4">
-        <input
-          type="text"
-          placeholder="Search users..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="p-2 border rounded w-full"
-        />
-      </div>
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* Left side: Search and Users Table (Taking more space) */}
+        <div className="md:w-2/3">
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="p-2 border rounded w-full bg-white text-gray-800"
+            />
+          </div>
 
-      <form
-        onSubmit={editingUser ? handleUpdateUser : handleCreateUser}
-        className="mb-4 p-4 bg-slate-100 rounded"
-      >
-        <h2 className="text-xl font-semibold mb-2">
-          {editingUser ? "Edit User" : "Create New User"}
-        </h2>
-        <div className="grid gap-4">
-          <input
-            type="text"
-            placeholder="Username"
-            value={formData.username}
-            onChange={(e) =>
-              setFormData({ ...formData, username: e.target.value })
-            }
-            className="p-2 border rounded"
-          />
-          <input
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            className="p-2 border rounded"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({ ...formData, password: e.target.value })
-            }
-            className="p-2 border rounded"
-          />
-
-          <button
-            type="submit"
-            className="bg-slate-700 text-white p-2 rounded hover:opacity-95"
-          >
-            {editingUser ? "Update User" : "Create User"}
-          </button>
-          {editingUser && (
-            <button
-              type="button"
-              onClick={() => {
-                setEditingUser(null);
-                setFormData({
-                  username: "",
-                  email: "",
-                  password: "",
-                });
-              }}
-              className="bg-gray-500 text-white p-2 rounded hover:opacity-95"
-            >
-              Cancel Edit
-            </button>
+          {loading ? (
+            <p className="text-white">Loading...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : (
+            <div className="overflow-x-auto bg-white rounded">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="bg-slate-100">
+                    <th className="p-2">Username</th>
+                    <th className="p-2">Email</th>
+                    <th className="p-2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user) => (
+                    <tr key={user._id} className="border-b">
+                      <td className="p-2">{user.username}</td>
+                      <td className="p-2">{user.email}</td>
+                      <td className="p-2">
+                        <button
+                          onClick={() => {
+                            setEditingUser(user);
+                            setFormData({
+                              username: user.username,
+                              email: user.email,
+                              password: "",
+                            });
+                          }}
+                          className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDeleteUser(user._id, user.username)}
+                          className="bg-red-500 text-white px-2 py-1 rounded"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
-        </div>
-      </form>
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p className="text-red-500">{error}</p>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr className="bg-slate-100">
-                <th className="p-2">Username</th>
-                <th className="p-2">Email</th>
-                <th className="p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => (
-                <tr key={user._id} className="border-b">
-                  <td className="p-2">{user.username}</td>
-                  <td className="p-2">{user.email}</td>
-                  <td className="p-2">
-                    <button
-                      onClick={() => {
-                        setEditingUser(user);
-                        setFormData({
-                          username: user.username,
-                          email: user.email,
-                          password: "",
-                        });
-                      }}
-                      className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDeleteUser(user._id, user.username)}
-                      className="bg-red-500 text-white px-2 py-1 rounded"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="flex justify-center gap-2 mt-4">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+              <button
+                key={pageNum}
+                onClick={() => setPage(pageNum)}
+                className={`px-3 py-1 rounded ${
+                  page === pageNum ? "bg-slate-700 text-white" : "bg-slate-100"
+                }`}
+              >
+                {pageNum}
+              </button>
+            ))}
+          </div>
         </div>
-      )}
 
-      <div className="flex justify-center gap-2 mt-4">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-          <button
-            key={pageNum}
-            onClick={() => setPage(pageNum)}
-            className={`px-3 py-1 rounded ${
-              page === pageNum ? "bg-slate-700 text-white" : "bg-slate-100"
-            }`}
+        {/* Right side: Create/Edit User Form */}
+        <div className="md:w-1/3">
+          <form
+            onSubmit={editingUser ? handleUpdateUser : handleCreateUser}
+            className="p-4 bg-white rounded"
           >
-            {pageNum}
-          </button>
-        ))}
+            <h2 className="text-xl font-semibold mb-2">
+              {editingUser ? "Edit User" : "Create New User"}
+            </h2>
+            <div className="grid gap-4">
+              <input
+                type="text"
+                placeholder="Username"
+                value={formData.username}
+                onChange={(e) =>
+                  setFormData({ ...formData, username: e.target.value })
+                }
+                className="p-2 border rounded"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                className="p-2 border rounded"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                className="p-2 border rounded"
+              />
+
+              <button
+                type="submit"
+                className="bg-slate-700 text-white p-2 rounded hover:opacity-95"
+              >
+                {editingUser ? "Update User" : "Create User"}
+              </button>
+              {editingUser && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingUser(null);
+                    setFormData({
+                      username: "",
+                      email: "",
+                      password: "",
+                    });
+                  }}
+                  className="bg-gray-500 text-white p-2 rounded hover:opacity-95"
+                >
+                  Cancel Edit
+                </button>
+              )}
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

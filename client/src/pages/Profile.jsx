@@ -49,9 +49,56 @@ const Profile = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  const validateForm = () => {
+    const updates = Object.keys(formData);
+
+    if (updates.includes("username")) {
+      if (!formData.username || formData.username.trim() === "") {
+        toast.error("Username cannot be empty");
+        return false;
+      }
+      if (formData.username.length < 3) {
+        toast.error("Username must be at least 3 characters long");
+        return false;
+      }
+      const usernameRegex = /^[a-zA-Z0-9_]+$/;
+      if (!usernameRegex.test(formData.username)) {
+        toast.error(
+          "Username can only contain letters, numbers, and underscores"
+        );
+        return false;
+      }
+    }
+    if (updates.includes("email")) {
+      if (!formData.email || formData.email.trim() === "") {
+        toast.error("Email cannot be empty");
+        return false;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        toast.error("Please enter a valid email address");
+        return false;
+      }
+    }
+    if (updates.includes("password")) {
+      if (formData.password && formData.password.length < 6) {
+        toast.error("Password must be at least 6 characters long");
+        return false;
+      }
+    }
+    if (Object.keys(formData).length === 0) {
+      toast.info("No changes to update");
+      return false;
+    }
+    return true;
+  };
+
 
   const handleSubmit = async(e) =>{
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try{
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`,{

@@ -18,8 +18,29 @@ const SignIn = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  const validateForm = () => {
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all fields");
+      return false;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address");
+      return false;
+    }
+    if (formData.password.trim() === "") {
+      toast.error("Password cannot be empty");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     try {
       dispatch(signInStart())
       const res = await fetch("/api/auth/signin", {
@@ -46,7 +67,7 @@ const SignIn = () => {
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-bold my-7">Sign In</h1>
+      <h1 className="text-3xl text-center font-bold my-7 text-white">Sign In</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="email"
@@ -70,7 +91,7 @@ const SignIn = () => {
         </button>
       </form>
       <div className="flex gap-2 mt-5">
-        <p>New user?</p>
+        <p className="text-white" >New user?</p>
         <Link to="/sign-up">
           <span className="text-blue-500">Sign up</span>
         </Link>

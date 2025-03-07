@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
+
 const Home = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-900 text-white text-center p-6">

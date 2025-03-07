@@ -15,7 +15,7 @@ const Header = () => {
             <li>Home</li>
           </Link>
           {currentUser?.isAdmin ? (
-            <Link to="/admin-dashboard">
+            <Link to="/admin">
               <li>Admin Dashboard</li>
             </Link>
           ) : (
