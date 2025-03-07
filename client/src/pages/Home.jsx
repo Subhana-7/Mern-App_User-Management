@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-
 const Home = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-900 text-white text-center p-6">
@@ -13,7 +12,7 @@ const Home = () => {
       >
         Welcome to My Developer Space 🚀
       </motion.h1>
-      
+
       <motion.p
         className="mt-4 text-lg md:text-xl text-gray-300"
         initial={{ opacity: 0 }}

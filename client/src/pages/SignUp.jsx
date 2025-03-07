@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
 const Signup = () => {
@@ -49,7 +49,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!validateForm()){
+    if (!validateForm()) {
       return;
     }
 
@@ -71,7 +71,7 @@ const Signup = () => {
         return;
       }
       toast.success("Account created successfully!");
-      navigate('/sign-in');
+      navigate("/sign-in");
     } catch (error) {
       setLoading(false);
       setError(true);
@@ -81,7 +81,9 @@ const Signup = () => {
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-bold my-7 text-white ">Sign up</h1>
+      <h1 className="text-3xl text-center font-bold my-7 text-white ">
+        Sign up
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="text"

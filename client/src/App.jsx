@@ -10,7 +10,6 @@ import AdminSignIn from "./pages/AdminSignIn";
 import AdminDashboard from "./pages/AdminDashboard";
 import PrivateAdminRoute from "./components/privateAdminRoute";
 
-
 const App = () => {
   return (
     <BrowserRouter>
@@ -19,7 +18,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/sign-in" element={<SignIn />} />
-        <Route element={<PrivateRoute/>}>
+        <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
         </Route>
         <Route path="/about" element={<About />} />

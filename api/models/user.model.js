@@ -17,19 +17,18 @@ const userSchema = new mongoose.Schema(
       require: true,
     },
     profilePicture: {
-      type:String,
+      type: String,
       default:
-        "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
+        "https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg",
     },
-    isAdmin:{
-      type:Boolean,
-      default:false,
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
 );
 
-
-const User = mongoose.model("User",userSchema);
+const User = mongoose.model("User", userSchema);
 
 export default User;

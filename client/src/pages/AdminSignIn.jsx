@@ -1,12 +1,16 @@
-import React,{useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { signInStart,signInSuccess,signInFailure } from '../redux/user/userSlice';
-import { ToastContainer,toast } from 'react-toastify';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
+import { ToastContainer, toast } from "react-toastify";
 
 const AdminSignIn = () => {
   const [formData, setFormData] = useState({});
-  const {loading,error} = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -17,7 +21,7 @@ const AdminSignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(signInStart())
+      dispatch(signInStart());
       const res = await fetch("/api/auth/admin/signin", {
         method: "POST",
         headers: {
@@ -27,22 +31,24 @@ const AdminSignIn = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        dispatch(signInFailure(data))
+        dispatch(signInFailure(data));
         toast.error(data.message || "Something went wrong!");
         return;
       }
-      dispatch(signInSuccess(data))
+      dispatch(signInSuccess(data));
       toast.success("admin logged in!");
-      navigate('/admin');
+      navigate("/admin");
     } catch (error) {
-      dispatch(signInFailure(error))
+      dispatch(signInFailure(error));
       toast.error(error.message || "Something went wrong!");
     }
   };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-bold my-7 text-white ">Admin Sign In</h1>
+      <h1 className="text-3xl text-center font-bold my-7 text-white ">
+        Admin Sign In
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="email"
@@ -65,10 +71,12 @@ const AdminSignIn = () => {
           {loading ? "Loading..." : "Sign In"}
         </button>
       </form>
-      <p className="text-red-700 mt-5">{error ? error.message || "Something went wrong!" : ""}</p>
+      <p className="text-red-700 mt-5">
+        {error ? error.message || "Something went wrong!" : ""}
+      </p>
       <ToastContainer position="top-right" />
     </div>
   );
-}
+};
 
-export default AdminSignIn
+export default AdminSignIn;

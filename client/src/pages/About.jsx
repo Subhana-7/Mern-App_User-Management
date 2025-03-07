@@ -12,14 +12,16 @@ const About = () => {
       >
         About This Application ⚡
       </motion.h1>
-      
+
       <motion.p
         className="mt-4 text-lg md:text-xl text-gray-300 max-w-2xl"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.8 }}
       >
-        This is a User Management Application built using MERN stack, JWT authentication, and Tailwind CSS. It provides secure user authentication and management features.
+        This is a User Management Application built using MERN stack, JWT
+        authentication, and Tailwind CSS. It provides secure user authentication
+        and management features.
       </motion.p>
 
       <motion.p
@@ -28,7 +30,8 @@ const About = () => {
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7, duration: 0.8 }}
       >
-        Designed for efficiency, security, and scalability, this app leverages modern web technologies to deliver a smooth experience.
+        Designed for efficiency, security, and scalability, this app leverages
+        modern web technologies to deliver a smooth experience.
       </motion.p>
     </div>
   );

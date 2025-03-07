@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.router.js";
 import cookieParser from "cookie-parser";
-import adminRoutes from './routes/admin.router.js';
+import adminRoutes from "./routes/admin.router.js";
 
 dotenv.config();
 
@@ -19,12 +19,12 @@ mongoose
     console.log("Connected to MongoDB");
   })
   .catch((err) => {
-    console.log("error connceting to database",err);
+    console.log("error connceting to database", err);
   });
 
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/admin",adminRoutes)
+app.use("/api/admin", adminRoutes);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

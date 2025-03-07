@@ -30,18 +30,21 @@ const AdminDashboard = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/admin/users?page=${page}&search=${search}&limit=5`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${currentUser?.token}`,
-        },
-      });
-  
+      const res = await fetch(
+        `/api/admin/users?page=${page}&search=${search}&limit=5`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${currentUser?.token}`,
+          },
+        }
+      );
+
       if (!res.ok) {
         throw new Error("Unauthorized: Please log in again");
       }
-  
+
       const data = await res.json();
       setUsers(data.users);
       setTotalPages(data.totalPages);
@@ -52,7 +55,6 @@ const AdminDashboard = () => {
       toast.error(error.message || "Failed to fetch users");
     }
   };
-  
 
   const handleCreateUser = async (e) => {
     e.preventDefault();
@@ -203,7 +205,10 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="admin-dashboard p-4 max-w-7xl mx-auto" style={{ backgroundColor: "rgb(17, 24, 39)" }}>
+    <div
+      className="admin-dashboard p-4 max-w-7xl mx-auto"
+      style={{ backgroundColor: "rgb(17, 24, 39)" }}
+    >
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -216,7 +221,9 @@ const AdminDashboard = () => {
         draggable
         pauseOnHover
       />
-      <h1 className="text-3xl font-semibold mb-4 text-white">Admin Dashboard</h1>
+      <h1 className="text-3xl font-semibold mb-4 text-white">
+        Admin Dashboard
+      </h1>
 
       <div className="flex flex-col md:flex-row gap-4">
         {/* Left side: Search and Users Table (Taking more space) */}
@@ -265,7 +272,9 @@ const AdminDashboard = () => {
                           Edit
                         </button>
                         <button
-                          onClick={() => handleDeleteUser(user._id, user.username)}
+                          onClick={() =>
+                            handleDeleteUser(user._id, user.username)
+                          }
                           className="bg-red-500 text-white px-2 py-1 rounded"
                         >
                           Delete
@@ -279,17 +288,21 @@ const AdminDashboard = () => {
           )}
 
           <div className="flex justify-center gap-2 mt-4">
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-              <button
-                key={pageNum}
-                onClick={() => setPage(pageNum)}
-                className={`px-3 py-1 rounded ${
-                  page === pageNum ? "bg-slate-700 text-white" : "bg-slate-100"
-                }`}
-              >
-                {pageNum}
-              </button>
-            ))}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+              (pageNum) => (
+                <button
+                  key={pageNum}
+                  onClick={() => setPage(pageNum)}
+                  className={`px-3 py-1 rounded ${
+                    page === pageNum
+                      ? "bg-slate-700 text-white"
+                      : "bg-slate-100"
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              )
+            )}
           </div>
         </div>
 

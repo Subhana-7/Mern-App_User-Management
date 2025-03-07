@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-import { Link ,useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import { signInStart,signInSuccess,signInFailure } from "../redux/user/userSlice";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const SignIn = () => {
@@ -10,7 +14,7 @@ const SignIn = () => {
     email: "",
     password: "",
   });
-  const {loading,error} = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -42,7 +46,7 @@ const SignIn = () => {
       return;
     }
     try {
-      dispatch(signInStart())
+      dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -52,22 +56,24 @@ const SignIn = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        dispatch(signInFailure(data))
+        dispatch(signInFailure(data));
         toast.error(data.message || "Something went wrong!");
         return;
       }
-      dispatch(signInSuccess(data))
+      dispatch(signInSuccess(data));
       toast.success("user logged in!");
-      navigate('/');
+      navigate("/");
     } catch (error) {
-      dispatch(signInFailure(error))
+      dispatch(signInFailure(error));
       toast.error(error.message || "Something went wrong!");
     }
   };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-bold my-7 text-white">Sign In</h1>
+      <h1 className="text-3xl text-center font-bold my-7 text-white">
+        Sign In
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           type="email"
@@ -91,12 +97,14 @@ const SignIn = () => {
         </button>
       </form>
       <div className="flex gap-2 mt-5">
-        <p className="text-white" >New user?</p>
+        <p className="text-white">New user?</p>
         <Link to="/sign-up">
           <span className="text-blue-500">Sign up</span>
         </Link>
       </div>
-      <p className="text-red-700 mt-5">{error ? error.message || "Something went wrong!" : ""}</p>
+      <p className="text-red-700 mt-5">
+        {error ? error.message || "Something went wrong!" : ""}
+      </p>
       <ToastContainer position="top-right" />
     </div>
   );
