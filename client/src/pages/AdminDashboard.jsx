@@ -226,7 +226,6 @@ const AdminDashboard = () => {
       </h1>
 
       <div className="flex flex-col md:flex-row gap-4">
-        {/* Left side: Search and Users Table (Taking more space) */}
         <div className="md:w-2/3">
           <div className="mb-4">
             <input
@@ -306,7 +305,6 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Right side: Create/Edit User Form */}
         <div className="md:w-1/3">
           <form
             onSubmit={editingUser ? handleUpdateUser : handleCreateUser}

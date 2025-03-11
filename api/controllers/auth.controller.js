@@ -41,7 +41,7 @@ export const signout = (req, res) => {
   res.clearCookie("access_token").status(200).json("Signout Success!");
 };
 
-export const adminSignin = async (req, res) => {
+export const adminSignin = async (req, res,next) => {
   const { email, password } = req.body;
   try {
     const validUser = await User.findOne({ email, isAdmin: true });

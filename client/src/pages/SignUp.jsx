@@ -8,44 +8,56 @@ const Signup = () => {
     email: "",
     password: "",
   });
-  const [error, setError] = useState(false);
+  const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Field Validation Function
+  const validateField = (name, value) => {
+    let error = "";
+    if (!value) {
+      error = `${name} is required`;
+    } else if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        error = "Invalid email format";
+      }
+    } else if (name === "password") {
+      if (value.length < 6) {
+        error = "Password must be at least 6 characters long";
+      }
+    } else if (name === "username") {
+      if (value.length < 3) {
+        error = "Username must be at least 3 characters long";
+      }
+      const usernameRegex = /^[a-zA-Z0-9_]+$/;
+      if (!usernameRegex.test(value)) {
+        error = "Username can only contain letters, numbers, and underscores";
+      }
+    }
+    return error;
+  };
+
+  // Handle Input Change and Validate Field
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+    setErrors({ ...errors, [id]: validateField(id, value) });
   };
 
+  // Validate the Entire Form Before Submission
   const validateForm = () => {
-    if (!formData.username || !formData.email || !formData.password) {
-      toast.error("Please fill in all fields");
-      return false;
-    }
+    let newErrors = {};
+    Object.keys(formData).forEach((field) => {
+      const error = validateField(field, formData[field]);
+      if (error) newErrors[field] = error;
+    });
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast.error("Please enter a valid email address");
-      return false;
-    }
-    if (formData.password.length < 6) {
-      toast.error("Password must be at least 6 characters long");
-      return false;
-    }
-    if (formData.username.length < 3) {
-      toast.error("Username must be at least 3 characters long");
-      return false;
-    }
-    const usernameRegex = /^[a-zA-Z0-9_]+$/;
-    if (!usernameRegex.test(formData.username)) {
-      toast.error(
-        "Username can only contain letters, numbers, and underscores"
-      );
-      return false;
-    }
-
-    return true;
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
+  // Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -55,18 +67,15 @@ const Signup = () => {
 
     try {
       setLoading(true);
-      setError(false);
       const res = await fetch("/api/auth/signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
       setLoading(false);
+
       if (data.success === false) {
-        setError(true);
         toast.error(data.message || "Something went wrong!");
         return;
       }
@@ -74,38 +83,44 @@ const Signup = () => {
       navigate("/sign-in");
     } catch (error) {
       setLoading(false);
-      setError(true);
       toast.error(error.message || "Something went wrong!");
     }
   };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-bold my-7 text-white ">
-        Sign up
-      </h1>
+      <h1 className="text-3xl text-center font-bold my-7 text-white">Sign up</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="text"
-          placeholder="Username"
-          id="username"
-          className="bg-slate-300 p-3 rounded-lg"
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          id="email"
-          className="bg-slate-300 p-3 rounded-lg"
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          id="password"
-          className="bg-slate-300 p-3 rounded-lg"
-          onChange={handleChange}
-        />
+        <div>
+          <input
+            type="text"
+            placeholder="Username"
+            id="username"
+            className={`bg-slate-300 p-3 rounded-lg w-full ${errors.username ? "border border-red-500" : ""}`}
+            onChange={handleChange}
+          />
+          {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
+        </div>
+        <div>
+          <input
+            type="email"
+            placeholder="Email"
+            id="email"
+            className={`bg-slate-300 p-3 rounded-lg w-full ${errors.email ? "border border-red-500" : ""}`}
+            onChange={handleChange}
+          />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="Password"
+            id="password"
+            className={`bg-slate-300 p-3 rounded-lg w-full ${errors.password ? "border border-red-500" : ""}`}
+            onChange={handleChange}
+          />
+          {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+        </div>
         <button
           disabled={loading}
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
@@ -119,7 +134,6 @@ const Signup = () => {
           <span className="text-blue-500">Sign in</span>
         </Link>
       </div>
-      <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
       <ToastContainer position="top-right" />
     </div>
   );
